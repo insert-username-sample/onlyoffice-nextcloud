@@ -567,7 +567,7 @@ class CallbackController extends Controller {
                     }
 
                     $result = 0;
-                } catch (\Exception $e) {
+                } catch (\Exception | \Error $e) {
                     $this->logger->error("Track: $fileId status $status error", ["exception" => $e]);
                     // if ($status === self::TRACKERSTATUS_MUSTSAVE) {
                     //     $this->eventDispatcher->dispatchTyped(new DocumentUnsavedEvent($userId, $fileId, $file->getName()));
