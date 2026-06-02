@@ -75,7 +75,7 @@ OC.L10N.register(
     "Show watermark on link shares with specific system tags": "Mostrar marca d'aigua per a usos compartits d'enllaços amb etiquetes de sistema específics",
     "Select tag": "Seleccionar etiqueta",
     "Select file to compare": "Seleccioni un arxiu per comparar",
-    "REVIEW mode for viewing": "Mode de revisió per visualització",
+    "REVIEW mode for viewing": "Mode de REVISIÓ per visualització",
     "Markup": "Canvis",
     "Final": "Final",
     "Original": "Original",
