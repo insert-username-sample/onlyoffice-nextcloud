@@ -119,7 +119,7 @@ OC.L10N.register(
     "Light": "Claro",
     "Dark": "Escuro",
     "Review only": "Revisão apenas",
-    "Comment only": "Comentar apenas",
+    "Comment only": "Comentário apenas",
     "Form filling": "Preenchimento de formularios",
     "Global filter": "Filtro global",
     "group": "grupo",

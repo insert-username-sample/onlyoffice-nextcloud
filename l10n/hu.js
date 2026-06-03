@@ -180,7 +180,7 @@ OC.L10N.register(
     "Presentation": "Bemutató",
     "Comment": "Megjegyzés",
     "PDF": "PDF",
-    "Comment/Form filling": "Megjegyzés/Űrlapkitöltés",
+    "Comment/Form filling": "Megjegyzés/Űrlap kitöltés",
     "Mailing is completed successfully": "A levelezés sikeresen befejeződött",
     "Mailing is completed with some errors": "A levelezés néhány hibával fejeződött be",
     "Files. Mailing is completed successfully": "Fájlok. A levelezés sikeresen befejeződött",
