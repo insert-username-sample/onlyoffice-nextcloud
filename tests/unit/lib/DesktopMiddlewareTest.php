@@ -47,6 +47,7 @@ use OCP\INavigationManager;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use Test\TestCase;
 
@@ -74,141 +75,58 @@ class DesktopMiddlewareTest extends TestCase {
         );
     }
 
-    private function configureDesktopRequest(string $entryHref, string $requestUri): void {
-        $this->request->method('getHeader')->willReturn('AscDesktopEditor/6.0');
-        $this->navigationManager->method('getDefaultEntryIdForUser')->willReturn('dashboard');
-        $this->navigationManager->method('get')->willReturn(['id' => 'dashboard', 'href' => $entryHref]);
-        $this->request->method('getRequestUri')->willReturn($requestUri);
+    private function configure(string $userAgent, string $defaultAppId, bool $hasEntry, ?string $route): void {
+        $this->request->method('getHeader')->willReturn($userAgent);
+        $this->navigationManager->method('getDefaultEntryIdForUser')->willReturn($defaultAppId);
+        $this->navigationManager->method('get')->willReturn($hasEntry ? ['id' => $defaultAppId, 'href' => "/apps/{$defaultAppId}"] : null);
+        $this->request->method('getParam')->willReturn($route);
+    }
+
+    public static function passThroughScenarios(): array {
+        return [
+            'empty user agent' => ['', 'dashboard', true, 'dashboard.page.index'],
+            'regular browser user agent' => ['Mozilla/5.0 (X11; Linux x86_64)', 'dashboard', true, 'dashboard.page.index'],
+            'default app is already files' => ['AscDesktopEditor/6.0', 'files', true, 'files.view.index'],
+            'default app has no navigation entry' => ['AscDesktopEditor/6.0', 'dashboard', false, 'dashboard.page.index'],
+            'no route on the request' => ['AscDesktopEditor/6.0', 'dashboard', true, null],
+            'empty route on the request' => ['AscDesktopEditor/6.0', 'dashboard', true, ''],
+            'request is for another app' => ['AscDesktopEditor/6.0', 'dashboard', true, 'files.view.index'],
+            'ocs request is for another app' => ['AscDesktopEditor/6.0', 'dashboard', true, 'ocs.files.api.getThumbnail'],
+        ];
+    }
+
+    public static function redirectScenarios(): array {
+        return [
+            'request is for the default app' => ['AscDesktopEditor/6.0', 'dashboard', true, 'dashboard.page.index'],
+            'ocs request is for the default app' => ['AscDesktopEditor/6.0', 'dashboard', true, 'ocs.dashboard.page.index'],
+        ];
     }
 
     /**
-     * Passes through without redirecting when the User-Agent header is empty.
+     * Leaves the request untouched in every scenario that should not trigger a desktop redirect.
      */
-    public function testPassesThroughWhenUserAgentIsEmpty(): void {
-        $this->request->method('getHeader')->willReturn('');
+    #[DataProvider('passThroughScenarios')]
+    public function testPassesThrough(string $userAgent, string $defaultAppId, bool $hasEntry, ?string $route): void {
+        $this->configure($userAgent, $defaultAppId, $hasEntry, $route);
 
         $this->middleware->beforeController($this->controller, 'index');
         $this->addToAssertionCount(1);
     }
 
     /**
-     * Passes through without redirecting when the User-Agent belongs to a regular browser, not the desktop client.
+     * Redirects a desktop client that lands on its own (non-files) default app.
      */
-    public function testPassesThroughForNonDesktopUserAgent(): void {
-        $this->request->method('getHeader')->willReturn('Mozilla/5.0 (X11; Linux x86_64)');
-
-        $this->middleware->beforeController($this->controller, 'index');
-        $this->addToAssertionCount(1);
-    }
-
-    /**
-     * Passes through without redirecting when the user's default app is already files.
-     */
-    public function testPassesThroughWhenDefaultAppIsFiles(): void {
-        $this->request->method('getHeader')->willReturn('AscDesktopEditor/6.0');
-        $this->navigationManager->method('getDefaultEntryIdForUser')->willReturn('files');
-
-        $this->middleware->beforeController($this->controller, 'index');
-        $this->addToAssertionCount(1);
-    }
-
-    /**
-     * Passes through without redirecting when the default app has no registered navigation entry.
-     */
-    public function testPassesThroughWhenNavigationEntryNotFound(): void {
-        $this->request->method('getHeader')->willReturn('AscDesktopEditor/6.0');
-        $this->navigationManager->method('getDefaultEntryIdForUser')->willReturn('dashboard');
-        $this->navigationManager->method('get')->willReturn(null);
-
-        $this->middleware->beforeController($this->controller, 'index');
-        $this->addToAssertionCount(1);
-    }
-
-    /**
-     * Passes through without redirecting when the request is on a subpath of the default app, not its root.
-     */
-    public function testPassesThroughWhenOnSubpathOfDefaultApp(): void {
-        $this->configureDesktopRequest(
-            'https://example.com/apps/dashboard',
-            '/apps/dashboard/settings'
-        );
-
-        $this->middleware->beforeController($this->controller, 'index');
-        $this->addToAssertionCount(1);
-    }
-
-    /**
-     * Redirects when the desktop client lands on the root of the default app with no trailing slash on either side.
-     */
-    public function testRedirectsWhenDesktopClientLandsOnDefaultApp(): void {
+    #[DataProvider('redirectScenarios')]
+    public function testRedirectsToFiles(string $userAgent, string $defaultAppId, bool $hasEntry, ?string $route): void {
         $this->expectException(DesktopRedirectException::class);
 
-        $this->configureDesktopRequest(
-            'https://example.com/apps/dashboard',
-            '/apps/dashboard'
-        );
+        $this->configure($userAgent, $defaultAppId, $hasEntry, $route);
 
         $this->middleware->beforeController($this->controller, 'index');
     }
 
     /**
-     * Redirects correctly when the entry href has a trailing slash but the request URI does not, and vice versa.
-     */
-    public function testRedirectNormalisesTrailingSlashes(): void {
-        $this->expectException(DesktopRedirectException::class);
-
-        $this->configureDesktopRequest(
-            'https://example.com/apps/dashboard/',
-            '/apps/dashboard'
-        );
-
-        $this->middleware->beforeController($this->controller, 'index');
-    }
-
-    /**
-     * Redirects when pretty URLs are in use (no index.php in either the entry href or the request URI).
-     */
-    public function testRedirectWithPrettyUrls(): void {
-        $this->expectException(DesktopRedirectException::class);
-
-        $this->configureDesktopRequest(
-            'https://example.com/apps/dashboard',
-            '/apps/dashboard'
-        );
-
-        $this->middleware->beforeController($this->controller, 'index');
-    }
-
-    /**
-     * Redirects when index.php is present consistently in both the entry href and the request URI (no pretty URLs).
-     */
-    public function testRedirectWithIndexPhpInBothPaths(): void {
-        $this->expectException(DesktopRedirectException::class);
-
-        $this->configureDesktopRequest(
-            'https://example.com/index.php/apps/dashboard',
-            '/index.php/apps/dashboard'
-        );
-
-        $this->middleware->beforeController($this->controller, 'index');
-    }
-
-    /**
-     * Redirects when Nextcloud is installed in a subdirectory and both paths share the same prefix.
-     */
-    public function testRedirectWithSubdirectoryInstall(): void {
-        $this->expectException(DesktopRedirectException::class);
-
-        $this->configureDesktopRequest(
-            'https://example.com/nextcloud/apps/dashboard',
-            '/nextcloud/apps/dashboard'
-        );
-
-        $this->middleware->beforeController($this->controller, 'index');
-    }
-
-    /**
-     * Returns a RedirectResponse pointing to the files app when given a DesktopRedirectException.
+     * Turns a DesktopRedirectException into a redirect to the files app.
      */
     public function testAfterExceptionReturnsRedirectToFilesForDesktopRedirectException(): void {
         $this->urlGenerator->method('linkToRouteAbsolute')->willReturn('https://example.com/apps/files/');
@@ -224,7 +142,7 @@ class DesktopMiddlewareTest extends TestCase {
     }
 
     /**
-     * Rethrows any exception that is not a DesktopRedirectException, leaving it for other middleware to handle.
+     * Rethrows any exception that is not a DesktopRedirectException.
      */
     public function testAfterExceptionRethrowsUnrelatedExceptions(): void {
         $this->expectException(\RuntimeException::class);
