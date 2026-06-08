@@ -70,9 +70,18 @@ class DesktopMiddleware extends Middleware {
             return;
         }
 
-        $entryPath = rtrim(parse_url($entry['href'], PHP_URL_PATH) ?? '', '/');
-        $requestPath = rtrim(parse_url($this->request->getRequestUri(), PHP_URL_PATH) ?? '', '/');
-        if ($entryPath !== '' && $entryPath === $requestPath) {
+        $route = $this->request->getParam('_route');
+
+        if (!is_string($route) || $route === '') {
+            return;
+        }
+
+        $routeParts = explode('.', $route);
+        $currentAppId = $routeParts[0] === 'ocs'
+            ? ($routeParts[1] ?? null)
+            : ($routeParts[0] ?? null);
+
+        if ($currentAppId === $defaultAppId) {
             throw new DesktopRedirectException();
         }
     }
