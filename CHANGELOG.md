@@ -8,6 +8,7 @@
 - cover circle shares in advanced permissions
 
 ### Changed
+- compatible with Nextcloud 34
 - fixed createUrl and template URLs being incorrectly decoded
 - fixed extra permissions being unavailable for user shares when admin resharing is disabled
 - fixed insecure direct object reference in share extra permissions API
