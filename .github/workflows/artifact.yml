@@ -28,6 +28,9 @@ jobs:
           npm install
           npm run build
           composer install --no-dev --optimize-autoloader
+          composer scope-dependencies
+          rm -rf vendor/firebase
+          composer dump-autoload --no-dev --optimize
           mkdir -p onlyoffice
           rsync -av --exclude='onlyoffice' . onlyoffice
           cd onlyoffice
@@ -54,6 +57,7 @@ jobs:
           rm ./phpunit.xml
           rm ./playwright.config.ts
           rm ./psalm.xml
+          rm ./scoper.inc.php
           rm ./tsconfig.json
           cd $cwd
           tar -czvf onlyoffice.tar.gz onlyoffice

@@ -83,6 +83,7 @@ jobs:
         working-directory: nextcloud/apps/onlyoffice
         run: |
           composer install
+          composer scope-dependencies
           composer bin phpunit install
 
       - name: Start server and configure Nextcloud

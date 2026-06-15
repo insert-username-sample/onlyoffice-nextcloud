@@ -84,7 +84,9 @@ jobs:
 
       - name: Install composer dependencies
         working-directory: nextcloud/apps/onlyoffice
-        run: composer install --no-dev
+        run: |
+          composer install --no-dev
+          composer scope-dependencies
 
       - name: Start server and configure Nextcloud
         working-directory: nextcloud
