@@ -28,6 +28,9 @@ jobs:
           npm install
           npm run build
           composer install --no-dev --optimize-autoloader
+          composer scope-dependencies
+          rm -rf vendor/firebase
+          composer dump-autoload --no-dev --optimize
           mkdir -p onlyoffice
           rsync -av --exclude='onlyoffice' . onlyoffice
           cd onlyoffice
@@ -37,17 +40,25 @@ jobs:
           rm -rf ./assets/document-formats/.git
           rm -rf ./node_modules/
           rm -rf ./src/
-          rm ./.eslintrc.js
+          rm -rf ./tests/
+          rm -rf ./vendor-bin/
           rm ./.gitignore
           rm ./.gitmodules
           rm ./.stylelintrc.json
+          rm ./CLAUDE.md
           rm ./composer.json
           rm ./composer.lock
+          rm ./eslint.config.mjs
           rm ./npm-shrinkwrap.json
           rm ./package.json
           rm ./ruleset.xml
           rm ./stylelint.config.js
-          rm ./webpack.js
+          rm ./vite.config.mjs
+          rm ./phpunit.xml
+          rm ./playwright.config.ts
+          rm ./psalm.xml
+          rm ./scoper.inc.php
+          rm ./tsconfig.json
           cd $cwd
           tar -czvf onlyoffice.tar.gz onlyoffice
       - name: Upload Artifact

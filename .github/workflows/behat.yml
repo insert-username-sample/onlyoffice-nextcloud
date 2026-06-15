@@ -82,6 +82,7 @@ jobs:
         working-directory: nextcloud/apps/onlyoffice
         run: |
           composer install
+          composer scope-dependencies
           composer bin behat install
 
       - name: Set up and configure Nextcloud

@@ -45,6 +45,18 @@ jobs:
           --health-timeout 5s
           --health-retries 30
 
+      smb:
+        image: dperson/samba
+        env:
+          USER1: "nextcloud;nextcloud"
+          SHARE1: "share;/shared;yes;no;no;all"
+          PERMISSIONS: "true"
+        options: >-
+          --health-cmd "nc -z localhost 445"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 30
+
     steps:
       - name: Set up Nextcloud env
         uses: ChristophWurst/setup-nextcloud@v0.4.2
@@ -64,9 +76,17 @@ jobs:
           submodules: true
           path: nextcloud/apps/onlyoffice
 
+      - name: Install php-smbclient
+        run: |
+          apt-get update && apt-get install -y libsmbclient-dev
+          pecl install smbclient
+          echo "extension=smbclient.so" >> $(php -r 'echo php_ini_loaded_file();')
+
       - name: Install composer dependencies
         working-directory: nextcloud/apps/onlyoffice
-        run: composer install --no-dev
+        run: |
+          composer install --no-dev
+          composer scope-dependencies
 
       - name: Start server and configure Nextcloud
         working-directory: nextcloud
@@ -76,6 +96,7 @@ jobs:
           CONTAINER_IP=$(hostname -I | awk '{print $1}')
           php occ config:system:set force_language --value en
           php occ app:install spreed
+          php occ app:enable files_external
           php occ app:enable --force onlyoffice
           php occ config:system:set auth.bruteforce.protection.enabled --value false --type bool
           php occ config:system:set ratelimit.protection.enabled --value false --type bool
@@ -91,7 +112,7 @@ jobs:
       - name: Build onlyoffice
         working-directory: nextcloud/apps/onlyoffice
         run: |
-          npm ci
+          npm install
           npm run build
 
       - name: Install Playwright Browsers
@@ -100,7 +121,9 @@ jobs:
 
       - name: Run Playwright tests
         working-directory: nextcloud/apps/onlyoffice
-        run: npx playwright test
+        run: |
+          CONTAINER_IP=$(hostname -I | awk '{print $1}')
+          DOCUMENT_STORAGE_URL="http://$CONTAINER_IP:8080/" npx playwright test
 
       - name: Upload test report
         uses: actions/upload-artifact@v4

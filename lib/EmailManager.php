@@ -1,30 +1,37 @@
 <?php
-/**
+/*
+ * Copyright (C) Ascensio System SIA, 2009-2026
  *
- * (c) Copyright Ascensio System SIA 2026
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation, together with the
+ * additional terms provided in the LICENSE file.
  *
- * This program is a free software product.
- * You can redistribute it and/or modify it under the terms of the GNU Affero General Public License
- * (AGPL) version 3 as published by the Free Software Foundation.
- * In accordance with Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
- * that Ascensio System SIA expressly excludes the warranty of non-infringement of any third-party rights.
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. For
+ * details, see the GNU AGPL at: https://www.gnu.org/licenses/agpl-3.0.html
  *
- * This program is distributed WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * For details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ * You can contact Ascensio System SIA by email at info@onlyoffice.com
+ * or by postal mail at 20A-6 Ernesta Birznieka-Upisha Street, Riga,
+ * LV-1050, Latvia, European Union.
  *
- * You can contact Ascensio System SIA at 20A-12 Ernesta Birznieka-Upisha street, Riga, Latvia, EU, LV-1050.
+ * The interactive user interfaces in modified versions of the Program
+ * are required to display Appropriate Legal Notices in accordance with
+ * Section 5 of the GNU AGPL version 3.
  *
- * The interactive user interfaces in modified source and object code versions of the Program
- * must display Appropriate Legal Notices, as required under Section 5 of the GNU AGPL version 3.
+ * No trademark rights are granted under this License.
  *
- * Pursuant to Section 7(b) of the License you must retain the original Product logo when distributing the program.
- * Pursuant to Section 7(e) we decline to grant you any rights under trademark law for use of our trademarks.
+ * All non-code elements of the Product, including illustrations,
+ * icon sets, and technical writing content, are licensed under the
+ * Creative Commons Attribution-ShareAlike 4.0 International License:
+ * https://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
- * All the Product's GUI elements, including illustrations and icon sets, as well as technical
- * writing content are licensed under the terms of the Creative Commons Attribution-ShareAlike 4.0 International.
- * See the License terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ * This license applies only to such non-code elements and does not
+ * modify or replace the licensing terms applicable to the Program's
+ * source code, which remains licensed under the GNU Affero General
+ * Public License v3.
  *
+ * SPDX-License-Identifier: AGPL-3.0-only
  */
 
 namespace OCA\Onlyoffice;
@@ -35,6 +42,7 @@ use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
+use OCP\Mail\Provider\IManager;
 
 /**
  * Email manager
@@ -43,71 +51,15 @@ use OCP\IUserManager;
  */
 class EmailManager {
 
-    /**
-     * Application name
-     *
-     * @var string
-     */
-    private $appName;
-
-    /**
-     * l10n service
-     *
-     * @var IL10N
-     */
-    private $trans;
-
-    /**
-     * Logger
-     *
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * Mailer
-     *
-     * @var IMailer
-     */
-    private $mailer;
-
-    /**
-     * User manager
-     *
-     * @var IUserManager
-     */
-    private $userManager;
-
-    /**
-     * Url generator service
-     *
-     * @var IURLGenerator
-     */
-    private $urlGenerator;
-
-    /**
-     * @param string $appName - application name
-     * @param IL10N $trans - l10n service
-     * @param LoggerInterface $logger - logger
-     * @param IMailer $mailer - mailer
-     * @param IUserManager $userManager - user manager
-     * @param IURLGenerator $urlGenerator - URL generator
-     */
     public function __construct(
-        $appName,
-        IL10N $trans,
-        LoggerInterface $logger,
-        IMailer $mailer,
-        IUserManager $userManager,
-        IURLGenerator $urlGenerator,
-    ) {
-        $this->appName = $appName;
-        $this->trans = $trans;
-        $this->logger = $logger;
-        $this->mailer = $mailer;
-        $this->userManager = $userManager;
-        $this->urlGenerator = $urlGenerator;
-    }
+        private readonly string $appName,
+        private readonly IL10N $trans,
+        private readonly LoggerInterface $logger,
+        private readonly IMailer $mailer,
+        private readonly IUserManager $userManager,
+        private readonly IURLGenerator $urlGenerator,
+        private readonly IManager $mailManager,
+    ) {}
 
     /**
      * Send notification about mention via email
@@ -127,7 +79,7 @@ class EmailManager {
         string $fileName,
         string $anchor,
         string $notificationObjectId
-    ) {
+    ): bool {
         $recipient = $this->userManager->get($recipientId);
         if (empty($recipient)) {
             $this->logger->error("recipient $recipientId is null");
@@ -176,7 +128,7 @@ class EmailManager {
      *
      * @return bool
      */
-    public function notifyEditorsCheckEmail(string $uid) {
+    public function notifyEditorsCheckEmail(string $uid): bool {
         $user = $this->userManager->get($uid);
         if (empty($user)) {
             $this->logger->error("recipient $uid is null");
@@ -212,7 +164,12 @@ class EmailManager {
      *
      * @return IEMailTemplate
      */
-    private function buildEmailTemplate(string $subject, string $heading, string $body, array $button = []) {
+    private function buildEmailTemplate(
+        string $subject,
+        string $heading,
+        string $body,
+        array $button = []
+    ): IEMailTemplate {
         $template = $this->mailer->createEMailTemplate("onlyoffice.NotifyEmail");
         $template->setSubject($subject);
         $template->addHeader();
@@ -232,10 +189,8 @@ class EmailManager {
      * @param IEMailTemplate $template - e-mail template
      * @param string $email - e-mail address
      * @param string $recipientName - recipient name
-     *
-     * @return bool
      */
-    private function sendEmailNotification(IEMailTemplate $template, string $email, string $recipientName) {
+    private function sendEmailNotification(IEMailTemplate $template, string $email, string $recipientName): bool {
         try {
             $message = $this->mailer->createMessage();
             $message->setTo([$email => $recipientName]);
@@ -252,5 +207,25 @@ class EmailManager {
         }
 
         return true;
+    }
+
+    /**
+     * Get user emails list that can send email messages
+     * @param string $uid
+     * @return array
+     */
+    public function getSenderAddressesFor(string $uid): array {
+        $emails = [];
+
+        $mailProviders = $this->mailManager->services($uid);
+
+        foreach ($mailProviders as $mailServices) {
+            $serviceEmails = array_filter(array_map(function ($service) {
+                return $service->capable('MessageSend') ? $service->getPrimaryAddress()->getAddress(): null;
+            }, $mailServices));
+            array_push($emails, ...$serviceEmails);
+        }
+
+        return $emails;
     }
 }

@@ -26,7 +26,7 @@ The app allows to:
 **For viewing:**
 
 - **WORD**: DOC, DOCM, DOCX, DOT, DOTM, DOTX, EPUB, FB2, FODT, HML, HTM, HTML, HWP, HWPX, MD, MHT, MHTML, ODT, OTT, PAGES, RTF, STW, SXW, TXT, WPS, WPT, XML
-- **CELL**: CSV, ET, ETT, FODS, NUMBERS, ODS, OTS, SXC, XLS, XLSB, XLSM, XLSX, XLT, XLTM, XLTX
+- **CELL**: CSV, ET, ETT, FODS, NUMBERS, ODS, OTS, SXC, TSV, XLS, XLSB, XLSM, XLSX, XLT, XLTM, XLTX
 - **SLIDE**: DPS, DPT, FODP, KEY, ODG, ODP, OTP, POT, POTM, POTX, PPS, PPSM, PPSX, PPT, PPTM, PPTX, SXI
 - **PDF**: DJVU, DOCXF, OFORM, OXPS, PDF, XPS
 - **DIAGRAM**: VSDM, VSDX, VSSM, VSSX, VSTM, VSTX
@@ -85,7 +85,7 @@ There are several ways to do that:
     cd onlyoffice
     git submodule update --init --recursive
     ```
-3. Build webpack (only if you chose to clone on the previous step):
+3. Run the build (only if you chose to clone on the previous step):
     ```bash
     npm install
     npm run build
@@ -93,6 +93,9 @@ There are several ways to do that:
 4. Install Composer dependencies (only if you chose to clone on the step 2):
     ```bash
     composer install
+    composer scope-dependencies
+    rm -rf vendor/firebase
+    composer dump-autoload
     ```
 5. Change the owner to update the application right from Nextcloud web interface:
     ```bash
