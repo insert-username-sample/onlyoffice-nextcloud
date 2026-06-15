@@ -92,7 +92,7 @@ class Application extends App implements IBootstrap {
         require_once __DIR__ . "/../../vendor/autoload.php";
 
         // Set the leeway for the JWT library in case the system clock is a second off
-        \Firebase\JWT\JWT::$leeway = $this->appConfig->getJwtLeeway();
+        \OCA\Onlyoffice\Vendor\Firebase\JWT\JWT::$leeway = $this->appConfig->getJwtLeeway();
 
         $context->registerMiddleware(DesktopMiddleware::class, true);
 

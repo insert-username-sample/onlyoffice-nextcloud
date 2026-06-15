@@ -13,11 +13,30 @@
         }
     },
     "scripts": {
-        "test:unit": "vendor-bin/phpunit/vendor/bin/phpunit",
-        "psalm": "vendor-bin/psalm/vendor/bin/psalm --no-cache --threads=$(nproc)",
+        "scope-dependencies": [
+            "composer update --working-dir=vendor-bin/php-scoper --no-interaction",
+            "vendor-bin/php-scoper/vendor/bin/php-scoper add-prefix --config=scoper.inc.php --force",
+            "rm -rf lib/Vendor",
+            "mkdir -p lib/Vendor/Firebase/JWT",
+            "cp build/*.php lib/Vendor/Firebase/JWT/",
+            "rm -rf build",
+            "composer dump-autoload"
+        ],
+        "scope-if-needed": "[ -d lib/Vendor ] || composer scope-dependencies",
+        "test:unit": [
+            "@scope-if-needed",
+            "vendor-bin/phpunit/vendor/bin/phpunit"
+        ],
+        "psalm": [
+            "@scope-if-needed",
+            "vendor-bin/psalm/vendor/bin/psalm --no-cache --threads=$(nproc)"
+        ],
         "psalm:dev": "@psalm",
         "psalm:update-baseline": "vendor-bin/psalm/vendor/bin/psalm --threads=1 --update-baseline --set-baseline=tests/psalm-baseline.xml",
-        "test:integration": "vendor-bin/behat/vendor/bin/behat --config tests/integration/behat/config/behat.php"
+        "test:integration": [
+            "@scope-if-needed",
+            "vendor-bin/behat/vendor/bin/behat --config tests/integration/behat/config/behat.php"
+        ]
     },
     "require": {
         "php": ">=8.1 <8.5",
