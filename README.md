@@ -93,6 +93,9 @@ There are several ways to do that:
 4. Install Composer dependencies (only if you chose to clone on the step 2):
     ```bash
     composer install
+    composer scope-dependencies
+    rm -rf vendor/firebase
+    composer dump-autoload
     ```
 5. Change the owner to update the application right from Nextcloud web interface:
     ```bash
