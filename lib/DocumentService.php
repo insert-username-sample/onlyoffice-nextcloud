@@ -187,12 +187,12 @@ class DocumentService {
                 "iat" => $iat,
                 "exp" => $exp
             ];
-            $token = \Firebase\JWT\JWT::encode($params, $this->appConfig->getDocumentServerSecret(), "HS256");
+            $token = \OCA\Onlyoffice\Vendor\Firebase\JWT\JWT::encode($params, $this->appConfig->getDocumentServerSecret(), "HS256");
             $opts["headers"][$this->appConfig->jwtHeader()] = "Bearer " . $token;
 
             $data["iat"] = $iat;
             $data["exp"] = $exp;
-            $token = \Firebase\JWT\JWT::encode($data, $this->appConfig->getDocumentServerSecret(), "HS256");
+            $token = \OCA\Onlyoffice\Vendor\Firebase\JWT\JWT::encode($data, $this->appConfig->getDocumentServerSecret(), "HS256");
             $data["token"] = $token;
             $opts["body"] = json_encode($data);
         }
@@ -306,12 +306,12 @@ class DocumentService {
                 "exp" => $exp
             ];
 
-            $token = \Firebase\JWT\JWT::encode($params, $this->appConfig->getDocumentServerSecret(), "HS256");
+            $token = \OCA\Onlyoffice\Vendor\Firebase\JWT\JWT::encode($params, $this->appConfig->getDocumentServerSecret(), "HS256");
             $opts["headers"][$this->appConfig->jwtHeader()] = "Bearer " . $token;
 
             $data["iat"] = $iat;
             $data["exp"] = $exp;
-            $token = \Firebase\JWT\JWT::encode($data, $this->appConfig->getDocumentServerSecret(), "HS256");
+            $token = \OCA\Onlyoffice\Vendor\Firebase\JWT\JWT::encode($data, $this->appConfig->getDocumentServerSecret(), "HS256");
             $data["token"] = $token;
             $opts["body"] = json_encode($data);
         }
