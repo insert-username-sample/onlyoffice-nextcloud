@@ -71,6 +71,7 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\L10N\IFactory;
 use OCP\Server;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
@@ -184,7 +185,7 @@ class EditorController extends Controller {
             $fileUrl = $this->getUrl($targetFile, $user, $shareToken);
 
             $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-            $region = str_replace("_", "-", $this->trans->getLocaleCode());
+            $region = str_replace("_", "-", Server::get(IFactory::class)->get("")->getLocaleCode());
             try {
                 $newFileUri = $this->documentService->getConvertedUri($fileUrl, $targetExt, $ext, $targetKey, $region, $ext === "pdf");
             } catch (\Exception $e) {
@@ -727,7 +728,7 @@ class EditorController extends Controller {
         $newFileUri = null;
         $key = $this->fileUtility->getKey($file);
         $fileUrl = $this->getUrl($file, $user, $shareToken);
-        $region = str_replace("_", "-", $this->trans->getLocaleCode());
+        $region = str_replace("_", "-", Server::get(IFactory::class)->get("")->getLocaleCode());
         try {
             $newFileUri = $this->documentService->getConvertedUri($fileUrl, $ext, $internalExtension, $key, $region);
         } catch (\Exception $e) {
