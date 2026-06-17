@@ -140,6 +140,14 @@ php occ config:app:set onlyoffice {setting_key} --value={setting_value}
 
 where `{setting_key}` is the key of the ONLYOFFICE integration setting, and `{setting_value}` is the corresponding value.
 
+#### Watermark settings
+
+Watermark settings (the `watermark_*` keys) are an exception: they are stored under the `files` app, not `onlyoffice`. Set them with `files` as the app id:
+
+```sh
+php occ config:app:set files {watermark_setting_key} --value={setting_value}
+```
+
 ### config.php
 
 Directly define settings in the `config/config.php` file under the `'onlyoffice'` array:
@@ -175,11 +183,14 @@ The tables below list all available Nextcloud settings along with the supported 
 | `groups`                    | Allow the following groups to access the editors                                                                                                                                                                                     | '["admin", "editors"]'                                                    | +  | +   | -          |
 | `verify_peer_off`           | Disable certificate verification                                                                                                                                                                                                     | true                                                                      | +  | +   | +          |
 | `unknownAuthor`             | Unknown author display name                                                                                                                                                                                                          | "Guest User"                                                              | +  | +   | -          |
+| `restrictExternalStorage`   | Restrict access to ONLYOFFICE for files from external storages                                                                                                                                                                      | false                                                                     | +  | +   | -          |
+| `liveViewOnShare`           | Enable live-viewing mode when accessing file by public link                                                                                                                                                                         | false                                                                     | +  | +   | -          |
 | `jwt_leeway`                | Defines the allowable leeway in JWT checks (measured in seconds).                                                                                                                                                                    | 60                                                                        | -  | -   | +          |
 | `limit_thumb_size`          | Defines the maximum size of a thumbnail (measured in bytes).                                                                                                                                                                         | 104857600                                                                 | -  | -   | +          |
 | `disable_download`          | Specifies whether to disable file downloads or not.                                                                                                                                                                                  | true                                                                      | -  | -   | +          |
 | `editors_check_interval`    | Defines the interval for checking the availability of editors using cron (measured in seconds).                                                                                                                                      | 86400                                                                     | -  | -   | +          |
 | `jwt_expiration`            | Defines the JWT expiration (measured in seconds).                                                                                                                                                                                    | 5                                                                         | -  | -   | +          |
+| `permissions_modifyFilter`  | Apply the filter globally (true) affecting all the other users, or locally (false).                                                                                                                                                                     | true                                                                      | -  | -   | +          |
 
 ### Customization settings
 
@@ -191,9 +202,13 @@ The tables below list all available Nextcloud settings along with the supported 
 | `customizationForcesave`     | Keep intermediate versions when editing (forcesave) | false                                                                                                                     | +  | +   | -          |
 | `customizationHelp`          | Display Help menu button                            | false                                                                                                                     | +  | +   | -          |
 | `customizationReviewDisplay` | Review mode for viewing                             | Possible values: `original`, `markup`, `final`. The default value is `original`.                                          | +  | +   | -          |
-| `customizationTheme`         | Default editor theme                                | Possible values: `theme-system`, `theme-light`, `theme-classic-light`, `theme-dark`, `theme-contrast-dark`, `theme-white`, `theme-night`. | +  | +   | -          |
+| `customizationTheme`         | Default editor theme                                | Possible values: `theme-system`, `default-light`, `default-dark`. The default value is `theme-system`. | +  | +   | -          |
 | `customization_macros`       | Run document macros                                 | false                                                                                                                     | +  | +   | -          |
 | `customization_plugins`      | Enable plugins                                      | false                                                                                                                     | +  | +   | -          |
+| `customization_customer`     | Customer info shown in the editor "About" section    | -                                                                                                                         | -  | -   | +          |
+| `customization_logo`         | Logo displayed in the editor header                 | -                                                                                                                       | -  | -   | +          |
+| `customization_zoom`         | Default document zoom level (percentage)            | 100                                                                                                                       | -  | -   | +          |
+| `customization_autosave`     | Enable autosave while editing                       | true                                                                                                                      | -  | -   | +          |
 
 ### Watermark settings
 
@@ -201,13 +216,17 @@ The tables below list all available Nextcloud settings along with the supported 
 |------------------------|---------------------------------------------------------|--------------------------------------------------------------------------------|----|-----|------------|
 | `watermark_enabled`    | Enable watermarking                                     | yes                                                                            | +  | +   | -          |
 | `watermark_text`       | Watermark text                                          | "{userId}, {date}"<br /><br />Supported tags: `{userId}`, `{userDisplayName}`, `{email}`, `{date}`, `{themingName}`. | +  | +   | -          |
-| `watermark_allGroups`  | Show watermark for users of groups                      | -                                                                              | +  | -   | -          |
-| `watermark_allTags`    | Show watermark on tagged files.                         | -                                                                              | +  | -   | -          |
+| `watermark_allGroups`  | Show watermark for users of groups                      | yes                                                                            | +  | +   | -          |
+| `watermark_allGroupsList` | Groups whose users see the watermark (pairs with `watermark_allGroups`)                | "admin,editors"                                                                | +  | +   | -          |
+| `watermark_allTags`    | Show watermark on tagged files                          | yes                                                                            | +  | +   | -          |
+| `watermark_allTagsList` | System tag IDs of files that show the watermark (pairs with `watermark_allTags`)       | "3,7"                                                                          | +  | +   | -          |
 | `watermark_linkAll`    | Show watermark for all link shares                      | yes                                                                            | +  | +   | -          |
 | `watermark_shareAll`   | Show watermark for all shares                           | yes                                                                            | +  | +   | -          |
-| `watermark_linkSecure` | Show watermark for download hidden shares               | -                                                                              | +  | -   | -          |
-| `watermark_linkRead`   | Show watermark for read only link shares                | -                                                                              | +  | -   | -          |
-| `watermark_linkTags`   | Show watermark on link shares with specific system tags | -                                                                              | +  | -   | -          |
+| `watermark_shareRead`  | Show watermark for read only shares                     | yes                                                                            | +  | +   | -          |
+| `watermark_linkSecure` | Show watermark for download hidden shares               | yes                                                                            | +  | +   | -          |
+| `watermark_linkRead`   | Show watermark for read only link shares                | yes                                                                            | +  | +   | -          |
+| `watermark_linkTags`   | Show watermark on link shares with specific system tags | yes                                                                            | +  | +   | -          |
+| `watermark_linkTagsList` | System tag IDs whose link shares show the watermark (pairs with `watermark_linkTags`)   | "3,7"                                                                          | +  | +   | -          |
 
 ## Checking the connection ☑️
 

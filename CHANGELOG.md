@@ -1,5 +1,8 @@
 # Change Log
 
+## Changed
+- stop Firefox collapsing the page when toggling checkboxes
+
 ## 10.1.0
 
 ### Added

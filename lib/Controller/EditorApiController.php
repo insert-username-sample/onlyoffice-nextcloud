@@ -64,6 +64,7 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\L10N\IFactory;
 use OCP\PreConditionNotMetException;
 use OCP\Server;
 use OCP\Share\IShare;
@@ -216,8 +217,9 @@ class EditorApiController extends OCSController {
             ],
             "documentType" => $format["type"],
             "editorConfig" => [
-                "lang" => str_replace("_", "-", $this->trans->getLanguageCode()),
-                "region" => str_replace("_", "-", $this->trans->getLocaleCode())
+                // App-less factory: $this->trans may report the wrong locale.
+                "lang" => str_replace("_", "-", Server::get(IFactory::class)->get("")->getLanguageCode()),
+                "region" => str_replace("_", "-", Server::get(IFactory::class)->get("")->getLocaleCode())
             ]
         ];
 
