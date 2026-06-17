@@ -118,7 +118,7 @@ function createFileOverload(name, context, templateId, targetId, open = true, fi
 function createFileProcess(name, dir, templateId, targetId, open, callback) {
 	let winEditor = null
 	if (((!OCA.Onlyoffice.setting.sameTab && !OCA.Onlyoffice.setting.enableSharing) || OCA.Onlyoffice.mobile || OCA.Onlyoffice.Desktop) && open) {
-		const loaderUrl = OCA.Onlyoffice.Desktop ? '' : generateFilePath(OCA.Onlyoffice.AppName, 'template', 'loader.html')
+		const loaderUrl = OCA.Onlyoffice.Desktop ? '' : generateFilePath(OCA.Onlyoffice.AppName, 'templates', 'loader.html')
 		winEditor = window.open(loaderUrl)
 	}
 
