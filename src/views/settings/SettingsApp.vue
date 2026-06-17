@@ -130,6 +130,16 @@ function onAddressSaved({ showSections: show }: { showSections: boolean }) {
     -webkit-column-width: 140px;
     margin-bottom: 1em;
 }
+
+/*
+ * Stop Firefox collapsing the page when toggling checkboxes
+ */
+@supports (-moz-appearance: none) {
+    .section-onlyoffice input[type='checkbox'].checkbox,
+    .section-onlyoffice input[type='radio'].radio {
+        width: 0;
+    }
+}
 </style>
 
 <style scoped>
