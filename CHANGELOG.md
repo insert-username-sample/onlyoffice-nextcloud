@@ -1,5 +1,7 @@
 # Change Log
 
+## 9.14.2
+
 ## Changed
 - stop Firefox collapsing the page when toggling checkboxes
 - fixed an issue where the editor was not using the user's preferred language
