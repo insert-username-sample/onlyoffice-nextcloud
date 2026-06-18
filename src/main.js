@@ -520,7 +520,7 @@ function registerFileActions() {
 		},
 		exec: fileOpenHandler,
 		default: DefaultType.HIDDEN,
-		order: -1,
+		order: -2,
 	})
 
 	registerFileAction({
