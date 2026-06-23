@@ -94,7 +94,7 @@ function createFileOverload(name, context, templateId, targetId, open = true, fi
 				mtime: new Date(),
 				mime: response.mimetype,
 				name: response.name,
-				owner: getCurrentUser().uid || null,
+				owner: getCurrentUser()?.uid || null,
 				permissions: Permission.ALL,
 				type: 'file',
 				root: filesContext?.root || '/files/' + getCurrentUser().uid,
@@ -123,7 +123,7 @@ function createFileOverload(name, context, templateId, targetId, open = true, fi
 function createFileProcess(name, dir, templateId, targetId, open, callback) {
 	let winEditor = null
 	if (((!OCA.Onlyoffice.setting.sameTab && !OCA.Onlyoffice.setting.enableSharing) || OCA.Onlyoffice.mobile || OCA.Onlyoffice.Desktop) && open) {
-		const loaderUrl = OCA.Onlyoffice.Desktop ? '' : generateFilePath(OCA.Onlyoffice.AppName, 'template', 'loader.html')
+		const loaderUrl = OCA.Onlyoffice.Desktop ? '' : generateFilePath(OCA.Onlyoffice.AppName, 'templates', 'loader.html')
 		winEditor = window.open(loaderUrl)
 	}
 
@@ -520,7 +520,7 @@ function registerFileActions() {
 		},
 		exec: fileOpenHandler,
 		default: DefaultType.HIDDEN,
-		order: -1,
+		order: -2,
 	})
 
 	registerFileAction({
