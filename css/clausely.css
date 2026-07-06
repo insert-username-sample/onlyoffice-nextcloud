@@ -1,0 +1,49 @@
+#content-vue, #content { padding: 0 !important; }
+#clausely-app { min-height: 100vh; font-family: Inter, 'Segoe UI', Arial, sans-serif; color: #101936; background: #f4f7fb; }
+button { font: inherit; cursor: default; }
+.clausely-logo { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; letter-spacing: -0.04em; }
+.clausely-logo__mark { display: block; width: 31px; height: 31px; object-fit: contain; }
+.clausely-logo__word { font-size: 24px; color: #121a36; }
+.drafting-page { height: 100vh; display: flex; flex-direction: column; background: #eef3f9; overflow: hidden; }
+.ribbon-top, .format-ribbon, .statusbar { flex: 0 0 auto; background: #fff; border-bottom: 1px solid #dfe6f0; display: flex; align-items: center; }
+.ribbon-top { height: 70px; gap: 28px; padding: 0 24px; box-shadow: 0 1px 0 rgba(16, 30, 56, .04); }
+.doc-title { min-width: 220px; padding-left: 18px; border-left: 1px solid #d7dfeb; color: #111a32; font-size: 14px; font-weight: 700; }
+.ribbon-top nav { flex: 1; display: flex; justify-content: center; align-items: center; gap: 42px; height: 100%; }
+.ribbon-top nav button { height: 100%; border: 0; border-bottom: 3px solid transparent; background: transparent; color: #111a32; font-weight: 700; }
+.ribbon-top nav button.active { color: #006bff; border-bottom-color: #006bff; }
+.ribbon-top nav button.ai { color: #681cff; }
+.user-actions { display: flex; align-items: center; gap: 15px; color: #4e5c76; }
+.user-actions button { padding: 9px 15px; border: 1px solid #ccd6e6; border-radius: 8px; background: #fff; color: #15213b; font-weight: 800; }
+.user-actions strong { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: #006bff; background: #e7f1ff; }
+.format-ribbon { height: 113px; gap: 18px; padding: 0 28px; box-shadow: 0 5px 18px rgba(15,36,68,.05); }
+.format-ribbon > div { min-height: 74px; display: flex; align-items: center; justify-content: center; padding: 0 15px; border-right: 1px solid #e1e7f0; color: #33415f; font-size: 14px; }
+.format-ribbon small { display: block; margin-top: 15px; color: #8795ab; }
+.clipboard, .quick-tools { flex-direction: column; gap: 3px; color: #60708b; }
+.select-control { min-width: 150px; height: 32px; min-height: 32px !important; border: 1px solid #ccd6e6 !important; border-radius: 6px; justify-content: space-between !important; }
+.select-control.compact { min-width: 72px; }
+.font-tools { min-width: 260px; gap: 16px; font-size: 20px; }.font-tools .red { color: #e02d3c; }
+.paragraph-tools { min-width: 270px; gap: 16px; font-size: 20px; }.styles { min-width: 270px; gap: 24px; }.styles strong { padding: 22px 24px; border: 1px solid #006bff; border-radius: 5px; }.editing { flex-direction: column; align-items: flex-start !important; line-height: 2; color: #52617a; }
+.studio-shell { min-height: 0; flex: 1 1 auto; display: grid; grid-template-columns: 276px minmax(560px, 1fr) 418px; }
+.matter-sidebar, .ai-panel { background: #fff; border-right: 1px solid #dce4ef; }
+.matter-sidebar { padding: 26px 22px; }
+.matter-sidebar h3 { display: flex; align-items: center; justify-content: space-between; margin: 0 0 20px; font-size: 14px; font-weight: 900; letter-spacing: .02em; }
+.matter-sidebar h3 button { width: 30px; height: 30px; border: 0; border-radius: 8px; color: #006bff; background: #eaf3ff; font-size: 22px; }
+.search { display: grid; grid-template-columns: 1fr 38px; gap: 10px; align-items: center; color: #8b98ad; }
+.search span, .search button { height: 38px; border: 1px solid #cdd7e7; border-radius: 6px; background: #fff; }.search span { display: flex; align-items: center; padding: 0 13px; }.search button { color: #59687f; }
+.matter-sidebar ul { list-style: none; padding: 18px 0; margin: 0; }
+.matter-sidebar li { position: relative; display: flex; gap: 12px; align-items: center; padding: 12px 15px; border-radius: 8px; color: #52617a; font-weight: 700; }
+.matter-sidebar li span:last-child { margin-left: auto; }.matter-sidebar li.selected { background: #eaf3ff; color: #006bff; }.matter-sidebar li.active { color: #2d3a55; }.clausely-icon { min-width: 18px; color: #53647f; }
+.sidebar-footer { margin-top: 66px; display: grid; gap: 24px; color: #15213b; }
+.document-stage { min-width: 0; padding: 20px 60px; overflow: auto; background: linear-gradient(90deg, rgba(222,229,239,.65), rgba(247,249,252,.96) 9%, rgba(247,249,252,.96) 91%, rgba(222,229,239,.65)); }
+.ruler { height: 16px; max-width: 880px; margin: 0 auto 35px; border-radius: 2px; background: repeating-linear-gradient(90deg, #cbd5e3 0 1px, transparent 1px 79px), #dfe6ef; }
+.paper { width: 770px; min-height: 820px; margin: 0 auto 30px; padding: 58px 82px; background: #fff; box-shadow: 0 10px 28px rgba(15,36,68,.18); font-family: Georgia, 'Times New Roman', serif; font-size: 18px; line-height: 1.62; color: #111; }
+.paper h1 { margin: 0 0 42px; text-align: center; font-size: 29px; letter-spacing: .02em; }.paper h2 { margin: 39px 0 14px; font-size: 21px; }.paper footer { text-align: center; margin-top: 43px; font: 800 14px Inter, sans-serif; color: #101936; }
+.ai-panel { border-left: 1px solid #dce4ef; padding: 22px; overflow: auto; }
+.ai-panel header { display: flex; align-items: center; justify-content: space-between; gap: 15px; }.ai-panel header .clausely-logo__word { font-size: 24px; }.ai-panel header span { padding: 7px 14px; border-radius: 9px; color: #0f9b4b; background: #dcf8e8; font-weight: 900; }.ai-panel header button { border: 0; background: transparent; color: #15213b; font-size: 21px; }
+.ai-panel nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 20px 0; }.ai-panel nav button { border: 0; background: transparent; padding: 0 0 9px; color: #3f4f6d; font-size: 13px; }.ai-panel nav .active { color: #006bff; border-bottom: 3px solid #006bff; }
+.ai-panel label { display: block; margin-bottom: 8px; font-weight: 900; }.ai-panel textarea { width: 100%; height: 84px; border: 1px solid #cad4e4; border-radius: 8px; padding: 14px; resize: none; font: inherit; color: #52617a; }.helper-row { display: flex; justify-content: space-between; margin: -24px 12px 16px; color: #99a5b7; font-size: 12px; pointer-events: none; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }.two div { border: 1px solid #cad4e4; border-radius: 8px; padding: 9px 12px; font-weight: 800; }.two strong { display: inline-block; margin-top: 6px; padding: 4px 10px; border-radius: 8px; background: #edf2f8; color: #37455e; }.generate { width: 100%; margin: 12px 0; padding: 11px 16px; border: 0; border-radius: 6px; color: #fff; font-weight: 900; background: linear-gradient(135deg, #1466ff, #0053df); box-shadow: 0 10px 26px rgba(0,91,255,.26); }
+.suggestion { border: 1px solid #d3dcea; border-radius: 10px; padding: 16px; box-shadow: 0 8px 20px rgba(15,36,68,.08); }.suggestion h3 { margin: 0 0 12px; }.suggestion h3 span { float: right; color: #f59d00; background: #fff4df; border-radius: 8px; padding: 4px 8px; }.suggestion a, .law a { color: #006bff; font-weight: 800; text-decoration: none; }.suggestion div { display: grid; grid-template-columns: 1fr 1fr 48px; gap: 12px; margin-top: 12px; }.suggestion button { border: 1px solid #d3dcea; border-radius: 6px; background: #fff; padding: 8px; }.suggestion .accept { color: #0aa74f; border-color: #61d690; }.suggestion .reject { color: #ff2b2b; border-color: #ffb0b0; }
+.ai-panel h4 { margin: 18px 0 10px; }.law { display: grid; grid-template-columns: 24px 1fr auto 20px; gap: 8px; align-items: center; margin: 8px 0; }.law span { color: #006bff; background: #e4f0ff; border-radius: 10px; padding: 6px 10px; font-weight: 800; }
+.statusbar { height: 52px; gap: 18px; padding: 0 26px; font-size: 14px; }.statusbar span { height: 28px; border-left: 1px solid #cfd8e7; }.statusbar b { padding: 5px 10px; border-radius: 10px; color: #006bff; background: #e9f3ff; }.statusbar em { margin-left: auto; font-style: normal; }.statusbar strong { margin-left: auto; color: #3f4f6d; }
+@media (max-width: 1300px) { .studio-shell { grid-template-columns: 230px minmax(520px, 1fr) 360px; }.document-stage { padding: 18px 24px; }.paper { width: 680px; padding: 52px 70px; }.ribbon-top nav { gap: 20px; }.format-ribbon { gap: 8px; padding: 0 14px; } }

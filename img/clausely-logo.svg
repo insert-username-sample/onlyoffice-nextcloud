@@ -1,0 +1,28 @@
+<svg width="600" height="600" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Clausely logo">
+  <defs>
+    <linearGradient id="cyanBlue" x1="127" y1="105" x2="459" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#35E6FF"/>
+      <stop offset="0.45" stop-color="#087BFF"/>
+      <stop offset="1" stop-color="#061B9E"/>
+    </linearGradient>
+    <linearGradient id="blueCyan" x1="462" y1="125" x2="110" y2="505" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0624A5"/>
+      <stop offset="0.48" stop-color="#126BFF"/>
+      <stop offset="1" stop-color="#42E5FF"/>
+    </linearGradient>
+    <linearGradient id="diamond" x1="236" y1="231" x2="363" y2="367" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#50F0FF"/>
+      <stop offset="1" stop-color="#0A78FF"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#003BAE" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <g filter="url(#softShadow)">
+    <path d="M132 252C132 146 144 74 259 54h128c34 0 56 20 56 51v21c0 25-18 39-43 39h-57c-28 0-51 12-68 35l-49 66c-20 28-44 39-74 37-14-1-20-17-20-51Z" fill="url(#cyanBlue)"/>
+    <path d="M372 163h95c88 0 129 48 129 126v164c0 23-14 35-35 35h-23c-22 0-34-14-34-37v-84c0-45-22-73-65-92l-90-39c-23-10-32-29-25-48 7-17 23-25 48-25Z" fill="url(#blueCyan)"/>
+    <path d="M468 348c0 106-12 178-127 198H213c-34 0-56-20-56-51v-21c0-25 18-39 43-39h57c28 0 51-12 68-35l49-66c20-28 44-39 74-37 14 1 20 17 20 51Z" fill="url(#cyanBlue)"/>
+    <path d="M228 437h-95C45 437 4 389 4 311V147c0-23 14-35 35-35h23c22 0 34 14 34 37v84c0 45 22 73 65 92l90 39c23 10 32 29 25 48-7 17-23 25-48 25Z" fill="url(#blueCyan)"/>
+    <path d="M300 210c23 45 55 77 100 100-45 23-77 55-100 100-23-45-55-77-100-100 45-23 77-55 100-100Z" fill="url(#diamond)"/>
+  </g>
+</svg>
