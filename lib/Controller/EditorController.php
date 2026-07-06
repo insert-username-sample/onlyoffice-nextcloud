@@ -106,6 +106,11 @@ class EditorController extends Controller {
         parent::__construct($appName, $request);
     }
 
+    #[NoAdminRequired]
+    public function clausely(): TemplateResponse {
+        return new TemplateResponse($this->appName, "clausely");
+    }
+
     /**
      * Create new file in folder
      *

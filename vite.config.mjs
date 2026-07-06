@@ -39,6 +39,7 @@ export default createAppConfig({
     main: 'src/main.js',
     desktop: 'src/desktop.js',
     directeditor: 'src/directeditor.js',
+    clausely: 'src/clausely.ts',
     editor: 'src/editor.js',
     listener: 'src/listener.js',
     settings: 'src/settings.js',
